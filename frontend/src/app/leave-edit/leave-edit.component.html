@@ -1,0 +1,147 @@
+<div class="full">
+  <div class="head">
+    <h1 class="head1">View Leave Request</h1>
+  </div>
+  <div class="IR">
+    <strong class="head2"
+      ><span style="color: red">*</span> Indicates required</strong
+    >
+  </div>
+  <br />
+  <div class="sub-table" *ngIf="selectedItems.length">
+    <form (ngSubmit)="item ? updateItem(item) : null">
+      <table class="styled-table" rules="all">
+        <thead>
+          <tr>
+            <th>Appllied_Date<span style="color: red">*</span></th>
+            <th>From-Date<span style="color: red">*</span></th>
+            <th>To_Date<span style="color: red">*</span></th>
+            <th>Leave_type<span style="color: red">*</span></th>
+            <th>Reason<span style="color: red">*</span></th>
+            <th>Approval Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of selectedItems">
+            <td>
+              <ng-container *ngIf="item.editable; else viewleave_applied_date">
+                <input
+                  type="text"
+                  [(ngModel)]="item.leave_applied_date"
+                  name="date-{{ item.emp_email }}"
+                  disabled="true"
+                />
+              </ng-container>
+              <ng-template #viewleave_applied_date>
+                {{ item.leave_applied_date }}
+              </ng-template>
+            </td>
+
+            <td>
+              <ng-container *ngIf="item.editable; else viewFromDate">
+                <input
+                  type="date"
+                  [(ngModel)]="item.from_date"
+                  name="fromDate-{{ item.emp_email }}"
+                  (change)="updateMinToDate(item)"
+                />
+              </ng-container>
+              <ng-template #viewFromDate>
+                {{ item.from_date }}
+              </ng-template>
+            </td>
+            <td>
+              <ng-container *ngIf="item.editable; else viewToDate">
+                <input
+                  type="date"
+                  [(ngModel)]="item.to_date"
+                  name="toDate-{{ item.emp_email }}"
+                  [min]="item.minToDate"
+                />
+              </ng-container>
+              <ng-template #viewToDate>
+                {{ item.to_date }}
+              </ng-template>
+            </td>
+            <td>
+              <ng-container *ngIf="item.editable; else viewToTime">
+                <input
+                  type="text"
+                  [(ngModel)]="item.leave_type"
+                  name="toTime-{{ item.emp_email }}"
+                />
+              </ng-container>
+              <ng-template #viewToTime>
+                {{ item.leave_type }}
+              </ng-template>
+            </td>
+
+            <td>
+              <ng-container *ngIf="item.editable; else viewDescription">
+                <textarea
+                  [(ngModel)]="item.reason"
+                  name="description-{{ item.emp_email }}"
+                  maxlength="400"
+                  class="scrollable-description"
+                ></textarea>
+              </ng-container>
+              <ng-template #viewDescription>
+                <div class="scrollable-description">{{ item.reason }}</div>
+              </ng-template>
+            </td>
+
+            <td>{{ item.status }}</td>
+            <td style="display: flex; border: none">
+              <button
+                mat-icon-button
+                color="warn"
+                type="button"
+                *ngIf="item.status !== 'pending'"
+                (click)="toggleEdit(item)"
+                [disabled]="
+                  item.status === 'approved' || item.status === 'rejected'
+                "
+                matTooltip="{{ item.editable ? 'Save' : 'Edit' }}"
+                [attr.aria-label]="item.editable ? 'Save' : 'Edit'"
+              >
+                <mat-icon>{{ item.editable ? "save" : "edit" }}</mat-icon>
+              </button>
+
+              <button
+                mat-icon-button
+                color="warn"
+                type="button"
+                *ngIf="item.status !== 'pending'"
+                (click)="deleteItem(item)"
+                [disabled]="
+                  item.status === 'approved' || item.status === 'rejected'
+                "
+                matTooltip="Delete"
+                aria-label="Delete"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </form>
+  </div>
+
+  <div class="no-details" *ngIf="selectedItems.length === 0">
+    <h1>No leave details found.</h1>
+  </div>
+
+  <div class="button-container">
+    <button
+      mat-raised-button
+      color="primary"
+      type="button"
+      (click)="navigateToProfile()"
+      class="back-button"
+    >
+      Back
+    </button>
+  </div>
+</div>

@@ -1,0 +1,99 @@
+<div class="page-container">
+    
+  
+    <!-- Main Content (Leave Form) -->
+    <div class="main-content">
+      <div class="form-container">
+        <h2>Leave Form</h2>
+        <form [formGroup]="leaveForm" (ngSubmit)="onSubmit()">
+          <div class="form-group">
+            <label for="emp_email">Employee Email:</label>
+            <input
+              id="emp_email"
+              formControlName="emp_email"
+              class="form-control"
+              placeholder="Employee Email"
+              [disabled]="true"
+            />
+          </div>
+          <div class="form-group">
+            <label for="from_date">From Date:<span style="color: red">*</span></label>
+            <input
+              id="from_date"
+              formControlName="from_date"
+              type="date"
+              class="form-control"
+              placeholder="From Date"
+              (change)="onFromDateChange()"
+              (focus)="openTimePicker($event)"
+            />
+          </div>
+          <div class="form-group">
+            <label for="to_date">To Date:<span style="color: red">*</span></label>
+            <input
+              id="to_date"
+              formControlName="to_date"
+              type="date"
+              class="form-control"
+              placeholder="To Date"
+              [min]="minToDate"
+              [disabled]="!leaveForm.get('from_date')?.value"
+              (focus)="openTimePicker($event)"
+            />
+          </div>
+          <div class="form-group">
+            <label for="leave_type" class="dropdown-container"
+              >Leave Type:<span style="color: red">*</span></label
+            >
+            <select id="leave_type" formControlName="leave_type" class="form-control">
+              <option value="" disabled>Select Leave Type</option>
+              <option *ngFor="let type of leaveTypes" [value]="type">
+                {{ type }}
+              </option>
+            </select>
+            <span class="dropdown-arrow"></span>
+          </div>
+          <div class="form-group">
+            <label for="reason">Reason:<span style="color: red">*</span></label>
+            <textarea
+              id="reason"
+              formControlName="reason"
+              class="form-control"
+              placeholder="Reason"
+              (input)="updateCharacterCount()"
+              maxlength="400"
+            ></textarea>
+            <div class="character-count">{{ characterCount }}/400</div>
+          </div>
+          <br />
+  
+          <div class="form-group">
+            <label for="unpaid">Unpaid Days:</label>
+            <input
+              id="unpaid"
+              formControlName="unpaid"
+              type="number"
+              class="form-control"
+              placeholder="Unpaid Days"
+              min="0"
+              (input)="validateDays($event)"
+            />
+          </div>
+          <div class="form-group">
+            <label for="paid">Paid Days:</label>
+            <input
+              id="paid"
+              formControlName="paid"
+              type="number"
+              class="form-control"
+              placeholder="Paid Days"
+              min="0"
+              (input)="validateDays($event)"
+            />
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  

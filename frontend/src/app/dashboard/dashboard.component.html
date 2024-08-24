@@ -1,0 +1,22 @@
+<div class="layout">
+  <header class="header">
+    <h1>Leave Form</h1>
+    <button (click)="logout()" class="logout-button">Logout</button>
+  </header>
+
+  <div class="main">
+    <aside class="sidebar">
+      <nav>
+        <ul>
+          <li><a routerLink="/leave-form">Leave Form</a></li>
+          <li><a routerLink="/leave-edit">Leave Edit</a></li>
+          <li><a routerLink="/pending">Pending</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <div class="content">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
